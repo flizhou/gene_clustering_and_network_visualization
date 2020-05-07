@@ -10,7 +10,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://github.com/flizhou/gene_network_analysis/issues.
+Report bugs at https://github.com/flizhou/gene_clustering_and_network_visualization/issues.
 
 If you are reporting a bug, please include:
 
@@ -36,7 +36,7 @@ articles, and such.
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at https://github.com/flizhou/gene_network_analysis/issues.
+The best way to send feedback is to file an issue at https://github.com/flizhou/gene_clustering_and_network_visualization/issues.
 
 If you are proposing a feature:
 
@@ -46,13 +46,13 @@ If you are proposing a feature:
   are welcome :)
   
 ### Get Started!
-Ready to contribute? Here's how to set up `gene_network_analysis` for local development.
+Ready to contribute? Here's how to set up `gene_clustering_and_network_visualization` for local development.
 
 First
 
 Fork, then clone the repo:
 ```
-git clone https://github.com/flizhou/gene_network_analysis.git
+git clone https://github.com/flizhou/gene_clustering_and_network_visualization.git
 ```
 
 Add upstream:
