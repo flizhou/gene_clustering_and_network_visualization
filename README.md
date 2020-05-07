@@ -50,8 +50,7 @@ and Molecular Biology* 4 (17).
 <div id="ref-Langfelder">
 
 Langfelder P, Horvath S. 2008. “WGCNA: An R Package for Weighted
-Correlation Network Analysis.” *BMC Bioinformatics*.
-<https://doi.org/9:559>.
+Correlation Network Analysis.” *BMC Bioinformatics*, 9:559.
 
 </div>
 
