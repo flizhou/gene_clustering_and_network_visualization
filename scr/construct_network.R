@@ -1,70 +1,94 @@
-'''
+# author: fanlizhou
 
-@fanlizhou
+"Constructs network and detects module, following the WGCNA tutorial, 
 
-Construct network and detect module 
-following the WGCNA tutorial
+Usage: src/clean_data.R --input=<input_file> --out_dir=<out_dir>
 
-'''
+Options:
+
+--input=<input_file> Path (including filename) to the microarray data.
+
+--out_dir=<out_dir>  Path to directory where the results will be saved.
+
+" -> doc
 
 library(WGCNA)
+library(tidyverse)
+library(docopt)
 library(gplots) 
-options(stringsAsFactors = FALSE)
 allowWGCNAThreads() 
 
-# Load the data saved in data_clean.R
-lnames = load(file = "GCN2-TLS-1000-dataInput.RData")
+opt <- docopt(doc)
 
-# Choose a set of soft-thresholding powers
-powers = c(c(1:10), seq(from = 12, to=30, by=2))
+main <- function(input, out_dir) {
 
-# Call the nextwork topology analysis function
-sft = pickSoftThreshold(datExpr, powerVector = powers, verbose = 5)
+     # Load the data saved in data_clean.R
+     lnames <- load(file = input)
 
-# Plot the results
-sizeGrWindow(9, 5)
-par(mfrow = c(1,2))
-cex1 = 0.9
+     # Choose a set of soft-thresholding powers
+     powers <- c(c(1:10), seq(from = 12, to = 30, by = 2))
 
-# Scale-free topology fit index as a function of the soft-thresholding power
-plot(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
-     xlab="Soft Threshold (power)",ylab="Scale Free Topology Model Fit,signed R^2",type="n",
-     main = paste("Scale independence"))
-text(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
-     labels=powers,cex=cex1,col="red")
+     # Call the nextwork topology analysis function
+     sft <- pickSoftThreshold(datExpr, powerVector = powers, verbose = 5)
 
-# This line corresponds to using an R^2 cut-off of h
-abline(h=-0.90,col="red")
+     # Plot the results
+     sizeGrWindow(9, 5)
+     par(mfrow = c(1, 2))
+     cex1 <- 0.9
 
-# Mean connectivity as a function of the soft-thresholding power
-plot(sft$fitIndices[,1], sft$fitIndices[,5],
-     xlab="Soft Threshold (power)",ylab="Mean Connectivity", type="n",
-     main = paste("Mean connectivity"))
-text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
+     # Scale-free topology fit index as a function of the soft-thresholding power
+     plot(sft$fitIndices[, 1], 
+          -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
+          xlab = "Soft Threshold (power)",
+          ylab = "Scale Free Topology Model Fit,signed R^2",
+          type = "n",
+          main = paste("Scale independence"))
 
-# Construct the gene network and identify modules
-net = blockwiseModules(datExpr, power = 6,
-                       TOMType = "unsigned", minModuleSize = 30,
-                       reassignThreshold = 0, mergeCutHeight = 0.25,
-                       numericLabels = TRUE, pamRespectsDendro = FALSE,
-                       saveTOMs = TRUE,
-                       saveTOMFileBase = "GCN2-1000-TOM",
-                       verbose = 3)
+     text(sft$fitIndices[, 1], -sign(sft$fitIndices[, 3])*sft$fitIndices[, 2],
+          labels = powers, cex = cex1, col = "red")
 
-# open a graphics window
-sizeGrWindow(12, 9)
-# Convert labels to colors for plotting
-mergedColors = labels2colors(net$colors)
-# Plot the dendrogram and the module colors underneath
-plotDendroAndColors(net$dendrograms[[1]], mergedColors[net$blockGenes[[1]]],
-                    "Module colors",
-                    dendroLabels = FALSE, hang = 0.03,
-                    addGuide = TRUE, guideHang = 0.05)
+     # This line corresponds to using an R^2 cut-off of h
+     abline(h=-0.90,col="red")
 
-moduleLabels = net$colors
-moduleColors = labels2colors(net$colors)
-MEs = net$MEs;
-geneTree = net$dendrograms[[1]];
-save(MEs, moduleLabels, moduleColors, geneTree,
-     file = "GCN2-TLS-1000-networkConstruction-auto.RData")
+     # Mean connectivity as a function of the soft-thresholding power
+     plot(sft$fitIndices[,1], 
+          sft$fitIndices[,5],
+          xlab = "Soft Threshold (power)",
+          ylab = "Mean Connectivity", type = "n",
+          main = paste("Mean connectivity"))
 
+     text(sft$fitIndices[,1], sft$fitIndices[,5], 
+          labels = powers, cex = cex1, col = "red")
+
+     # Construct the gene network and identify modules
+     net <- blockwiseModules(datExpr, 
+                             power = 6,
+                             TOMType = "unsigned", 
+                             minModuleSize = 30,
+                             reassignThreshold = 0, 
+                             mergeCutHeight = 0.25,
+                             numericLabels = TRUE, 
+                             pamRespectsDendro = FALSE,
+                             saveTOMs = TRUE,
+                             saveTOMFileBase = "GCN2-1000-TOM",
+                             verbose = 3)
+
+     # open a graphics window
+     sizeGrWindow(12, 9)
+     # Convert labels to colors for plotting
+     mergedColors <- labels2colors(net$colors)
+     # Plot the dendrogram and the module colors underneath
+     plotDendroAndColors(net$dendrograms[[1]], mergedColors[net$blockGenes[[1]]],
+                         "Module colors",
+                         dendroLabels = FALSE, hang = 0.03,
+                         addGuide = TRUE, guideHang = 0.05)
+
+     moduleLabels <- net$colors
+     moduleColors <- labels2colors(net$colors)
+     MEs <- net$MEs;
+     geneTree <- net$dendrograms[[1]];
+     save(MEs, moduleLabels, moduleColors, geneTree,
+          file = paste(out_dir, "GCN2-TLS-1000-networkConstruction-auto.RData", sep = "/"))
+}
+
+main(opt[["--input"]], opt[["--out_dir"]])

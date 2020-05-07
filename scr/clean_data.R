@@ -36,8 +36,10 @@ main <- function(input, out_dir) {
   names(rawData)
 
   # Reset row names
-  rownames(datExpr0) <- c("WTC_1","WTC_2","WTC_3","WTH_1","WTH_2",
-                          "WTH_3","GC_1","GC_2","GC_3","GH_1","GH_2","GH_3")
+  rownames(datExpr0) <- c("WTC_1","WTC_2","WTC_3",
+                          "WTH_1","WTH_2", "WTH_3",
+                          "GC_1","GC_2","GC_3",
+                          "GH_1","GH_2","GH_3")
   dim(datExpr0)
   names(datExpr0)
 
@@ -46,9 +48,15 @@ main <- function(input, out_dir) {
   if (!gsg$allOK)
   {
     if (sum(!gsg$goodGenes)>0)
-      printFlush(paste("Removing genes:", paste(names(datExpr0)[!gsg$goodGenes], sep = ", ")))
+      printFlush(paste("Removing genes:", 
+                 paste(names(datExpr0)[!gsg$goodGenes], 
+                 collapse = ", ")))
+
     if (sum(!gsg$goodSamples)>0)
-      printFlush(paste("Removing samples:", paste(rownames(datExpr0)[!gsg$goodSamples], sep = ", ")))
+      printFlush(paste("Removing samples:", 
+                 paste(rownames(datExpr0)[!gsg$goodSamples], 
+                 collapse = ", ")))
+
     # Remove the offending genes and samples from the data
     datExpr0 <- datExpr0[gsg$goodSamples, gsg$goodGenes]
   }
@@ -60,7 +68,7 @@ main <- function(input, out_dir) {
   par(cex <- 0.6)
   par(mar <- c(0,4,2,0))
   plot(sampleTree, main = "Sample clustering to detect outliers", 
-  sub = "", xlab = "", cex.lab = 1.5, cex.axis = 1.5, cex.main =2)
+      sub = "", xlab = "", cex.lab = 1.5, cex.axis = 1.5, cex.main =2)
 
   # Plot a line to show the cut
   abline(h = 5, col = "red")
