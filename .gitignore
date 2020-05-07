@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+/data/raw_data/*.csv
+/data/raw_data/*.RData
+/data/clean_data/*.csv
+/data/clean_data/*.RData
+/results/*.csv
+/results/*.txt
