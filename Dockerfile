@@ -1,4 +1,4 @@
-# Docker file for DSCI522_Group_301
+# Docker file for gene_clustering_and_network_visualization
 # Authors: Fanli Zhou
 
 #use rocker/tidyverse as the base image
